@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 public class MotorcycleController : MonoBehaviour
 {
     [SerializeField] WheelCollider frontWheelCollider, rearWheelCollider;
@@ -21,9 +22,28 @@ public class MotorcycleController : MonoBehaviour
     float steeringAngle;
     bool isBraking;
 
+    /// <summary>
+    /// Mobile controller variables
+    /// </summary>
+
+    public bool useTouchControls = false;
+    bool firstPress = false;
+    public GameObject throttlButton;
+    MobileController throttlPTI;
+    public GameObject reverseButton;
+    MobileController reversePTI;
+    public GameObject turnRightButton;
+    MobileController turnRightPTI;
+    public GameObject turnLeftButton;
+    MobileController turnLeftPTI;
+    public GameObject handbrakeButton;
+    MobileController handbrakePTI;
+
+
 
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
+
 
     Rigidbody rb;
 
@@ -71,6 +91,9 @@ public class MotorcycleController : MonoBehaviour
     bool isRigthLightIndicator;
 
 
+
+    [SerializeField] Button breakBtn;
+
     void Awake()
     {
         cmpAudio = GetComponentInChildren<AudioEngine>();
@@ -98,92 +121,159 @@ public class MotorcycleController : MonoBehaviour
 
         tailLight.SetActive(true);
         dayLight.SetActive(true);
+
+
+
+        throttlPTI = throttlButton.GetComponent<MobileController>();
+        reversePTI = reverseButton.GetComponent<MobileController>();
+        turnLeftPTI = turnLeftButton.GetComponent<MobileController>();
+        turnRightPTI = turnRightButton.GetComponent<MobileController>();
+        handbrakePTI = handbrakeButton.GetComponent<MobileController>();
+
+
     }
 
-    private void reset(){
+
+    private void reset()
+    {
         SceneManager.LoadScene(0);
     }
 
     private void Update()
     {
-        //Brake
-        if (Input.GetButton("Brake"))
-        {
-            Brake(true);
-            brakeLight.SetActive(true);
 
-        }
-        else if (rearWheelCollider.rpm < -1f && verticalInput > -0.7f)
+        if (useTouchControls)
         {
-            Brake(true);
+
+            if (reversePTI.buttonPressed)
+            {
+                Brake(true);
+                brakeLight.SetActive(true);
+            }
+            else
+            {
+                Brake(false);
+                brakeLight.SetActive(false);
+            }
+
+
+            if (throttlPTI.buttonPressed)
+            {
+
+                verticalInput += 0.003f;
+                firstPress = true;
+
+            }
+            else
+            {
+                verticalInput = 0f;
+            }
+
+            if (turnLeftPTI.buttonPressed)
+            {
+                 horizontalInput -= 1f;
+                if(turnRightPTI.buttonPressed){
+                    horizontalInput += 1f;
+                }
+               
+            }
+            // else
+            // {
+            //     horizontalInput = 0f;
+            // }
+
+            // if (turnRightPTI.buttonPressed)
+            // {
+            //     horizontalInput += 1f;
+            // }
+            // else
+            // {
+            //     horizontalInput = 0f;
+            // }
+
         }
         else
         {
-            Brake(false);
-        }
-
-        if(Input.GetButton("Reset")){
-            reset();
-        }
-
-        //ShifterManual
-        if (!isAutomatic)
-        {
-            if (Input.GetButtonDown("GearUp"))
+            //Brake
+            if (Input.GetButton("Brake"))
             {
-                ShifterManualUp();
+                Brake(true);
+                brakeLight.SetActive(true);
+
             }
-            else if (Input.GetButtonDown("GearDown"))
+            else if (rearWheelCollider.rpm < -1f && verticalInput > -0.7f)
             {
-                ShifterManualDown();
+                Brake(true);
             }
-        }
-
-        //Change View
-        if (Input.GetButtonDown("ChangeView") && !isCrashed)
-        {
-            cam_Follow.SetActive(!cam_Follow.activeInHierarchy);
-            cam_OnBoard.SetActive(!cam_OnBoard.activeInHierarchy);
-
-            canvas_OnBoard.SetActive(cam_OnBoard.activeInHierarchy);
-            canvas_Screen.SetActive(cam_Follow.activeInHierarchy);
-        }
-
-        //Head Light
-        if (Input.GetButtonDown("HeadLights"))
-        {
-            headLight.SetActive(!headLight.activeInHierarchy);
-        }
-
-        //Right Light
-        if (Input.GetButtonDown("RigthIndicator"))
-        {
-            turnLeftLight.SetActive(false);
-            turnRightLight.SetActive(false);
-
-            StopAllCoroutines();
-
-            isRigthLightIndicator = !isRigthLightIndicator;
-            if (isRigthLightIndicator)
+            else
             {
-                isLeftLightIndicator = false;
-                StartCoroutine(FlickerLight(turnRightLight));
+                Brake(false);
             }
-        }
 
-        //Left Light
-        if (Input.GetButtonDown("LeftIndicator"))
-        {
-            turnRightLight.SetActive(false);
-            turnLeftLight.SetActive(false);
-
-            StopAllCoroutines();
-
-            isLeftLightIndicator = !isLeftLightIndicator;
-            if (isLeftLightIndicator)
+            if (Input.GetButton("Reset"))
             {
-                isRigthLightIndicator = false;
-                StartCoroutine(FlickerLight(turnLeftLight));
+                reset();
+            }
+
+            //ShifterManual
+            if (!isAutomatic)
+            {
+                if (Input.GetButtonDown("GearUp"))
+                {
+                    ShifterManualUp();
+                }
+                else if (Input.GetButtonDown("GearDown"))
+                {
+                    ShifterManualDown();
+                }
+            }
+
+            //Change View
+            if (Input.GetButtonDown("ChangeView") && !isCrashed)
+            {
+                cam_Follow.SetActive(!cam_Follow.activeInHierarchy);
+                cam_OnBoard.SetActive(!cam_OnBoard.activeInHierarchy);
+
+                canvas_OnBoard.SetActive(cam_OnBoard.activeInHierarchy);
+                canvas_Screen.SetActive(cam_Follow.activeInHierarchy);
+            }
+
+            //Head Light
+            if (Input.GetButtonDown("HeadLights"))
+            {
+                headLight.SetActive(!headLight.activeInHierarchy);
+            }
+
+            //Right Light
+            if (Input.GetButtonDown("RigthIndicator"))
+            {
+                turnLeftLight.SetActive(false);
+                turnRightLight.SetActive(false);
+
+                StopAllCoroutines();
+
+                isRigthLightIndicator = !isRigthLightIndicator;
+                if (isRigthLightIndicator)
+                {
+                    isLeftLightIndicator = false;
+                    StartCoroutine(FlickerLight(turnRightLight));
+                }
+            }
+
+            //Left Light
+            if (Input.GetButtonDown("LeftIndicator"))
+            {
+                turnRightLight.SetActive(false);
+                turnLeftLight.SetActive(false);
+
+                StopAllCoroutines();
+
+                isLeftLightIndicator = !isLeftLightIndicator;
+                if (isLeftLightIndicator)
+                {
+                    isRigthLightIndicator = false;
+                    StartCoroutine(FlickerLight(turnLeftLight));
+                }
             }
         }
     }
@@ -192,7 +282,11 @@ public class MotorcycleController : MonoBehaviour
 
     void FixedUpdate()
     {
-        GetInput();
+        if (!useTouchControls)
+        {
+            GetInput();
+        }
+
         Steer();
         UpdateRearWheel();
         UpdateFrontWheel();
@@ -219,16 +313,17 @@ public class MotorcycleController : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
+
     }
 
     void Steer()
     {
         steeringAngle = maxSteerAngle * horizontalInput;
-        frontWheelCollider.steerAngle = Mathf.Lerp(frontWheelCollider.steerAngle, steeringAngle, 2f * Time.deltaTime) ;
+        frontWheelCollider.steerAngle = Mathf.Lerp(frontWheelCollider.steerAngle, steeringAngle, 2f * Time.deltaTime);
 
-      
+
         float angleHandlebar = Mathf.Lerp(steeringAngle, 0, speed / 300f);
-        handlebar.transform.localRotation = Quaternion.Lerp(handlebar.transform.localRotation, handlebarStartRot * Quaternion.Euler(0, angleHandlebar, 0), 2f * Time.deltaTime) ;
+        handlebar.transform.localRotation = Quaternion.Lerp(handlebar.transform.localRotation, handlebarStartRot * Quaternion.Euler(0, angleHandlebar, 0), 2f * Time.deltaTime);
 
         float angleVelocity = Mathf.Lerp(0, 45f, speed / 50f);
         float inclinationAngle = Mathf.Lerp(0, angleVelocity, Mathf.Abs(steeringAngle / maxSteerAngle));
@@ -244,7 +339,7 @@ public class MotorcycleController : MonoBehaviour
     {
         acceleration = verticalInput > 0 ? verticalInput : rearWheelCollider.rpm <= 1 && speed < 5 ? verticalInput * 0.1f : 0;
 
-        
+
 
         if (IsGrounded())
         {
@@ -253,7 +348,7 @@ public class MotorcycleController : MonoBehaviour
                 engineRpm = Mathf.Lerp(engineRpm, 1000f + Mathf.Abs(rearWheelCollider.rpm) * (gearRatio[currentGear] * finalDrive), 10 * Time.deltaTime);
                 totalPower = enginePower.Evaluate(engineRpm) * finalDrive * acceleration;
 
-                rearWheelCollider.motorTorque = (verticalInput == 0 || speed > 325f) ? 0 : currentGear == gearRatio.Length - 1 ? totalPower/3 : totalPower;
+                rearWheelCollider.motorTorque = (verticalInput == 0 || speed > 325f) ? 0 : currentGear == gearRatio.Length - 1 ? totalPower / 3 : totalPower;
 
             }
             else
@@ -273,21 +368,21 @@ public class MotorcycleController : MonoBehaviour
     {
         if (!IsGrounded()) return;
 
-        if (engineRpm > maxEngineRpm && currentGear < gearRatio.Length - 1) 
+        if (engineRpm > maxEngineRpm && currentGear < gearRatio.Length - 1)
         {
             currentGear++;
         }
-        if(currentGear > 0 )
+        if (currentGear > 0)
         {
             minEngineRpm = 2000f + Mathf.Abs(rearWheelCollider.rpm) * (gearRatio[currentGear - 1] * finalDrive);
             if (minEngineRpm < maxEngineRpm)
             {
                 currentGear--;
-                if(!isBraking)
+                if (!isBraking)
                 {
                     cmpAudio.DownGear();
                 }
-                
+
             }
         }
     }
@@ -312,7 +407,7 @@ public class MotorcycleController : MonoBehaviour
             if (minEngineRpm < maxEngineRpm)
             {
                 currentGear--;
-                if(currentGear == 0 && !isBraking && verticalInput <= 0)
+                if (currentGear == 0 && !isBraking && verticalInput <= 0)
                 {
                     cmpAudio.DownGear();
                 }
@@ -334,6 +429,7 @@ public class MotorcycleController : MonoBehaviour
 
     void Brake(bool brake)
     {
+        firstPress = false;
         isBraking = brake;
 
         if (brake)
@@ -360,8 +456,8 @@ public class MotorcycleController : MonoBehaviour
         offset_Wheel.transform.position = pos;
 
         Vector3 targetDir = offset_Wheel.transform.position - hinge_Rear.transform.position;
-        float angle = Vector3.SignedAngle(targetDir, -hinge_Rear.transform.forward,  hinge_Rear.transform.right);
-        //Debug.Log(angle);
+        float angle = Vector3.SignedAngle(targetDir, -hinge_Rear.transform.forward, hinge_Rear.transform.right);
+
 
         if (angle < 0)
         {
@@ -383,7 +479,7 @@ public class MotorcycleController : MonoBehaviour
         frontWheelCollider.GetWorldPose(out pos, out rot);
 
         float offset = pos.y - hinge_Front.transform.position.y;
-        susp_Front.transform.localPosition = startLocalPos + new Vector3(0, offset , 0);
+        susp_Front.transform.localPosition = startLocalPos + new Vector3(0, offset, 0);
         wheel_Front.transform.Rotate(wheel_Front.transform.InverseTransformVector(wheel_Front.transform.right) * frontWheelCollider.rpm * 2 * Mathf.PI / 60.0f * Time.deltaTime * Mathf.Rad2Deg, Space.Self);
     }
 
@@ -434,10 +530,10 @@ public class MotorcycleController : MonoBehaviour
             rb.drag = 0.5f;
             if (cam_OnBoard.activeInHierarchy)
             {
-                cam_Follow.transform.position = this.transform.position + new Vector3(0,2,-2);
+                cam_Follow.transform.position = this.transform.position + new Vector3(0, 2, -2);
                 cam_Follow.SetActive(true);
                 cam_OnBoard.SetActive(false);
             }
-        }   
+        }
     }
 }
