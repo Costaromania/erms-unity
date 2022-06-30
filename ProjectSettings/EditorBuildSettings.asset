@@ -14,8 +14,11 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/PROMETEO - Car Controller/Scenes/Mobile Devices Demo.unity
     guid: 136749ef7a3080548b1664e996c901e6
-  - enabled: 1
+  - enabled: 0
     path: Assets/Motorcycle Pro Drivable/Scene/keyboard.unity
     guid: fcac0e113e9baab428848f2b02ee05ab
+  - enabled: 1
+    path: Assets/Motorcycle Pro Drivable/Scene/touch.unity
+    guid: 4700246f8c15dd748a3141e0ee718afb
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0e4937dede6f9d84a98dd22d9fc29d37, type: 2}

@@ -26,6 +26,7 @@ public class MotorcycleController : MonoBehaviour
     /// Mobile controller variables
     /// </summary>
 
+    [SerializeField] Button resetBtn;
     public bool useTouchControls = false;
     bool firstPress = false;
     public GameObject throttlButton;
@@ -122,7 +123,8 @@ public class MotorcycleController : MonoBehaviour
         tailLight.SetActive(true);
         dayLight.SetActive(true);
 
-
+        Button btn = breakBtn.GetComponent<Button>();
+        btn.onClick.AddListener(reset);
 
         throttlPTI = throttlButton.GetComponent<MobileController>();
         reversePTI = reverseButton.GetComponent<MobileController>();
@@ -169,27 +171,26 @@ public class MotorcycleController : MonoBehaviour
                 verticalInput = 0f;
             }
 
-            if (turnLeftPTI.buttonPressed)
+            if (turnLeftPTI.buttonPressed || turnRightPTI.buttonPressed)
             {
-                 horizontalInput -= 1f;
-                if(turnRightPTI.buttonPressed){
-                    horizontalInput += 1f;
+                if (turnLeftPTI.buttonPressed)
+                {
+                    horizontalInput -= 0.03f;
                 }
-               
-            }
-            // else
-            // {
-            //     horizontalInput = 0f;
-            // }
+                if (turnRightPTI.buttonPressed)
+                {
+                    horizontalInput += 0.03f;
+                }
 
-            // if (turnRightPTI.buttonPressed)
-            // {
-            //     horizontalInput += 1f;
-            // }
-            // else
-            // {
-            //     horizontalInput = 0f;
-            // }
+            }
+            else
+            {
+
+                horizontalInput = 0f;
+
+            }
+
+
 
         }
         else
