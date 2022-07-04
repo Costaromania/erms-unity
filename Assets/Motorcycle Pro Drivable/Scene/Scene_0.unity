@@ -43000,7 +43000,7 @@ PrefabInstance:
       objectReference: {fileID: 949426432}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: useTouchControls
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: enginePower.m_Curve.Array.data[0].time

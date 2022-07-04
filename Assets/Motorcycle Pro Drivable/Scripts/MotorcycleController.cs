@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 public class MotorcycleController : MonoBehaviour
 {
+    public static bool gameIsPaused;
+
     [SerializeField] WheelCollider frontWheelCollider, rearWheelCollider;
     [HideInInspector] public float maxEngineRpm = 14000f;
     float minEngineRpm;
@@ -29,6 +31,10 @@ public class MotorcycleController : MonoBehaviour
     [SerializeField] Button resetBtn;
     public bool useTouchControls = false;
     bool firstPress = false;
+
+    public GameObject menu;
+    public Button openMenu;
+    public Button resumeBtn;
     public GameObject throttlButton;
     MobileController throttlPTI;
     public GameObject reverseButton;
@@ -97,6 +103,8 @@ public class MotorcycleController : MonoBehaviour
 
     void Awake()
     {
+        menu.SetActive(false);
+
         cmpAudio = GetComponentInChildren<AudioEngine>();
         rb = GetComponent<Rigidbody>();
 
@@ -126,6 +134,12 @@ public class MotorcycleController : MonoBehaviour
         Button btn = breakBtn.GetComponent<Button>();
         btn.onClick.AddListener(reset);
 
+         Button btnResume = resumeBtn.GetComponent<Button>();
+        btnResume.onClick.AddListener(resumeMenu);
+
+         Button btnOpenMenu = openMenu.GetComponent<Button>();
+        btnOpenMenu.onClick.AddListener(resumeMenu);
+
         throttlPTI = throttlButton.GetComponent<MobileController>();
         reversePTI = reverseButton.GetComponent<MobileController>();
         turnLeftPTI = turnLeftButton.GetComponent<MobileController>();
@@ -139,6 +153,13 @@ public class MotorcycleController : MonoBehaviour
     private void reset()
     {
         SceneManager.LoadScene(0);
+
+       
+    }
+
+    private void resumeMenu(){
+         gameIsPaused = !gameIsPaused;
+            PauseGame();
     }
 
     private void Update()
@@ -162,7 +183,7 @@ public class MotorcycleController : MonoBehaviour
             if (throttlPTI.buttonPressed)
             {
 
-                verticalInput += 0.003f;
+                verticalInput += 0.01f;
                 firstPress = true;
 
             }
@@ -195,6 +216,14 @@ public class MotorcycleController : MonoBehaviour
         }
         else
         {
+
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                
+                Brake(true);
+                brakeLight.SetActive(true);
+            }
+
             //Brake
             if (Input.GetButton("Brake"))
             {
@@ -520,8 +549,15 @@ public class MotorcycleController : MonoBehaviour
 
     }
 
+    public void  OnTriggerEnter(Collider other)
+    {
+         Debug.Log("Trigger finish");
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
+        
+        
         Vector3 collisionForce = collision.impulse / Time.fixedDeltaTime;
 
         if (collisionForce.magnitude > 100f && speed > 50f)
@@ -536,5 +572,33 @@ public class MotorcycleController : MonoBehaviour
                 cam_OnBoard.SetActive(false);
             }
         }
+    }
+
+    void PauseGame ()
+    {
+        if(gameIsPaused)
+        {
+             menu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else 
+        {
+            Time.timeScale = 1;
+            menu.SetActive(false);
+        }
+    }
+
+
+
+ 
+    private void OnCollisionStay(Collision collision)
+    {
+         Debug.Log(collision.collider.name);
+    }
+ 
+    private void OnCollisionExit(Collision collision)
+    {
+        Debug.Log(collision.collider.name);
+    
     }
 }
