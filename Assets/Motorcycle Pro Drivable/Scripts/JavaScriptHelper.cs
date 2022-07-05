@@ -8,6 +8,11 @@ public class JavaScriptHelper : MonoBehaviour
 {
    [SerializeField] Text myText;
 
+   void Awake()
+    {
+        setMyText(myText.text);
+    }
+
    public void setMyText(string text)
    {
       myText.text = text;
