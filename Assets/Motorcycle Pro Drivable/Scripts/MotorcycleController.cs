@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System.Net.Mime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+// using Sentry; // On the top of the script
+
 public class MotorcycleController : MonoBehaviour
 {
     public static bool gameIsPaused;
@@ -30,6 +33,8 @@ public class MotorcycleController : MonoBehaviour
 
     [SerializeField] Button resetBtn;
     public bool useTouchControls = false;
+
+    public GameObject theStart ;
     bool firstPress = false;
 
     public GameObject menu;
@@ -97,6 +102,9 @@ public class MotorcycleController : MonoBehaviour
     bool isLeftLightIndicator;
     bool isRigthLightIndicator;
 
+    Vector3 originalPos;
+
+    public float currentTime = 0f;
 
 
     [SerializeField] Button breakBtn;
@@ -104,6 +112,7 @@ public class MotorcycleController : MonoBehaviour
     void Awake()
     {
         menu.SetActive(false);
+        originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
 
         cmpAudio = GetComponentInChildren<AudioEngine>();
         rb = GetComponent<Rigidbody>();
@@ -134,10 +143,10 @@ public class MotorcycleController : MonoBehaviour
         Button btn = breakBtn.GetComponent<Button>();
         btn.onClick.AddListener(reset);
 
-         Button btnResume = resumeBtn.GetComponent<Button>();
+        Button btnResume = resumeBtn.GetComponent<Button>();
         btnResume.onClick.AddListener(resumeMenu);
 
-         Button btnOpenMenu = openMenu.GetComponent<Button>();
+        Button btnOpenMenu = openMenu.GetComponent<Button>();
         btnOpenMenu.onClick.AddListener(resumeMenu);
 
         throttlPTI = throttlButton.GetComponent<MobileController>();
@@ -153,13 +162,20 @@ public class MotorcycleController : MonoBehaviour
     private void reset()
     {
         SceneManager.LoadScene(0);
+        // verticalInput = 0f;
+        // horizontalInput = 0f;
+        // totalPower = 0f;
+        // Brake(true);
+        // gameObject.transform.position = originalPos;
 
-       
+
+
     }
 
-    private void resumeMenu(){
-         gameIsPaused = !gameIsPaused;
-            PauseGame();
+    private void resumeMenu()
+    {
+        gameIsPaused = !gameIsPaused;
+        PauseGame();
     }
 
     private void Update()
@@ -219,7 +235,7 @@ public class MotorcycleController : MonoBehaviour
 
             if (Input.GetKeyUp(KeyCode.S))
             {
-                
+
                 Brake(true);
                 brakeLight.SetActive(true);
             }
@@ -309,13 +325,18 @@ public class MotorcycleController : MonoBehaviour
     }
 
 
-
     void FixedUpdate()
-    {
-        if (!useTouchControls)
-        {
-            GetInput();
-        }
+    {   
+        currentTime += Time.deltaTime;
+       // if (!useTouchControls)
+        //{
+            if(currentTime >= 3){
+            GetInput();      
+            }
+        //   Debug.Log("Test delta time: " + Time.deltaTime);
+       // }
+
+       
 
         Steer();
         UpdateRearWheel();
@@ -549,15 +570,14 @@ public class MotorcycleController : MonoBehaviour
 
     }
 
-    public void  OnTriggerEnter(Collider other)
-    {
-        //  Debug.Log("Trigger finish");
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        
-        
+
+  
+        Debug.Log(collision.gameObject.name);
+    
+
         Vector3 collisionForce = collision.impulse / Time.fixedDeltaTime;
 
         if (collisionForce.magnitude > 100f && speed > 50f)
@@ -574,14 +594,14 @@ public class MotorcycleController : MonoBehaviour
         }
     }
 
-    void PauseGame ()
+    void PauseGame()
     {
-        if(gameIsPaused)
+        if (gameIsPaused)
         {
-             menu.SetActive(true);
+            menu.SetActive(true);
             Time.timeScale = 0f;
         }
-        else 
+        else
         {
             Time.timeScale = 1;
             menu.SetActive(false);
@@ -590,15 +610,15 @@ public class MotorcycleController : MonoBehaviour
 
 
 
- 
+
     private void OnCollisionStay(Collision collision)
     {
         //  Debug.Log(collision.collider.name);
     }
- 
+
     private void OnCollisionExit(Collision collision)
     {
         // Debug.Log(collision.collider.name);
-    
+
     }
 }

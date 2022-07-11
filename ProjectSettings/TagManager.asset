@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Grass
   - Street
+  - finish
   layers:
   - Default
   - TransparentFX

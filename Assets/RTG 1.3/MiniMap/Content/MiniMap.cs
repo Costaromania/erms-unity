@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Sentry; // On the top of the script
 
 
 public class MiniMap : MonoBehaviour
@@ -68,13 +67,13 @@ public class MiniMap : MonoBehaviour
 
 
 
-        //Init();
+        Init();
 
     }
 
     void Update()
     {
-        Debug.Log("Pozitia x: " + player1.position.x + " Pozitia y: " + player1.position.y);
+        // Debug.Log("Pozitia x: " + player1.position.x + " Pozitia y: " + player1.position.y);
         // SentrySdk.CaptureMessage("Test update");
 
 
