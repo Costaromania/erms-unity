@@ -551,7 +551,7 @@ public class MotorcycleController : MonoBehaviour
 
     public void  OnTriggerEnter(Collider other)
     {
-         Debug.Log("Trigger finish");
+        //  Debug.Log("Trigger finish");
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -593,12 +593,12 @@ public class MotorcycleController : MonoBehaviour
  
     private void OnCollisionStay(Collision collision)
     {
-         Debug.Log(collision.collider.name);
+        //  Debug.Log(collision.collider.name);
     }
  
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log(collision.collider.name);
+        // Debug.Log(collision.collider.name);
     
     }
 }

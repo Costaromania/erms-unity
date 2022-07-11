@@ -10,11 +10,13 @@ public class Timer : MonoBehaviour
 
     float currentTime;
     public Text currentTimeText;
+    public Text startText;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentTime = 0; 
+        currentTime = -3;
+        startText.text = ""; 
     }
 
     // Update is called once per frame
@@ -22,6 +24,23 @@ public class Timer : MonoBehaviour
     {
         currentTime = currentTime + Time.deltaTime;
         TimeSpan time = TimeSpan.FromSeconds(currentTime);
-        currentTimeText.text = time.ToString(@"mm\:ss\:fff");
+        // if(currentTime > 0 && currentTime < 3){
+        //     startText.text = "START";
+        // }
+        if(currentTime > 0)
+        {
+            currentTimeText.text = time.ToString(@"mm\:ss\:fff");
+            if(currentTime < 3)
+            {
+                startText.text = "START";
+            }
+            else{
+                startText.text = "";
+            }
+        }
+        else
+        {
+            currentTimeText.text = time.ToString(@"\-ss\:fff");
+        }
     }
 }
