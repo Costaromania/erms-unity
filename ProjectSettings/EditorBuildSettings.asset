@@ -5,26 +5,11 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Motorcycle Pro Drivable/Scene/Scene_0.unity
-    guid: 8238988ec9874e04b97e1d6946cfa01c
-  - enabled: 0
-    path: Assets/Test/test.unity
-    guid: c4caf8d2994ff864487cbd3927e80e9f
-  - enabled: 0
-    path: Assets/PROMETEO - Car Controller/Scenes/Mobile Devices Demo.unity
-    guid: 136749ef7a3080548b1664e996c901e6
-  - enabled: 0
-    path: Assets/Motorcycle Pro Drivable/Scene/keyboard.unity
-    guid: fcac0e113e9baab428848f2b02ee05ab
-  - enabled: 0
-    path: Assets/Motorcycle Pro Drivable/Scene/touch.unity
-    guid: 4700246f8c15dd748a3141e0ee718afb
-  - enabled: 0
-    path: Assets/Motorcycle Pro Drivable/Scene/touch 1.unity
-    guid: a9b7640b9ed522a48bdff02953205eb6
   - enabled: 1
     path: Assets/Scenes/keyboard generated 01.unity
     guid: 82a3766a05698744ba94443d2a784976
+  - enabled: 0
+    path: Assets/Scenes/mobile.unity
+    guid: 2e9d9f7acdaff284383df154a78144fe
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0e4937dede6f9d84a98dd22d9fc29d37, type: 2}

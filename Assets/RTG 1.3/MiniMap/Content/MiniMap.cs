@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sentry; // On the top of the script
+
 
 public class MiniMap : MonoBehaviour
 {
@@ -48,11 +50,12 @@ public class MiniMap : MonoBehaviour
     public Material colorRoad;
 
 
-    
+
 
     void Awake()
     {
         miniObj.transform.localScale = new Vector3(miniMapSize + 0.5f, miniMapSize + 0.5f, 0);
+        // SentrySdk.CaptureMessage("Test start");
 
 
         int iMiniMap = LayerMask.NameToLayer("MiniMapLayer");
@@ -72,6 +75,8 @@ public class MiniMap : MonoBehaviour
     void Update()
     {
         Debug.Log("Pozitia x: " + player1.position.x + " Pozitia y: " + player1.position.y);
+        // SentrySdk.CaptureMessage("Test update");
+
 
     }
 
@@ -98,7 +103,7 @@ public class MiniMap : MonoBehaviour
     void LateUpdate()
     {
 
-    
+
         miniObj.transform.localScale = new Vector3(miniMapSize + 0.5f, miniMapSize + 0.5f, 0);
 
         if (player1)
@@ -264,6 +269,6 @@ public class MiniMap : MonoBehaviour
 
     }
 
-    
+
 
 }

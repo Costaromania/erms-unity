@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
+using Sentry;
 
 public class Timer : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class Timer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // options.TracesSampleRate = 1.0;
         currentTime = -3;
         startText.text = ""; 
     }
