@@ -14,6 +14,8 @@ public class Timer : MonoBehaviour
 
     public bool isFinished = false;
 
+    public bool isStarted = false;
+
     public void FinishTime()
     {
         isFinished = true;
@@ -45,6 +47,9 @@ public class Timer : MonoBehaviour
             if (currentTime > 0)
             {
                 currentTimeText.text = time.ToString(@"mm\:ss\:fff");
+                if(currentTime == 0){
+                    isStarted = true;
+                }
                 if (currentTime < 3)
                 {
                     startText.text = "START";

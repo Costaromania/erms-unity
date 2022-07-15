@@ -161,15 +161,25 @@ public class MotorcycleController : MonoBehaviour
 
     private void reset()
     {
+        
         SceneManager.LoadScene(0);
-        // verticalInput = 0f;
-        // horizontalInput = 0f;
-        // totalPower = 0f;
-        // Brake(true);
-        // gameObject.transform.position = originalPos;
-
-
-
+       
+    //     for(int i = 0; i < 10; i++)
+    //     {
+    //         rb.velocity = Vector3.zero;
+    //     verticalInput = 0f;
+    //     horizontalInput = 0f;
+    //     totalPower = 0f;
+    //      rearWheelCollider.brakeTorque = rb.mass * 200;
+    //         frontWheelCollider.brakeTorque = rb.mass * 200;  
+    //          gameObject.transform.position = originalPos;
+    //    rb.velocity = new Vector3(0, 0, 0); 
+    //     }
+      
+       
+       
+      
+            	
     }
 
     private void resumeMenu()

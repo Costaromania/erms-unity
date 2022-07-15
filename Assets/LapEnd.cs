@@ -8,7 +8,21 @@ using Newtonsoft.Json;
 public class LapEnd : MonoBehaviour
 {
     public bool check = false;
+    public bool checkStart = false;
     public Timer current;
+    public JavaScriptHelper userDataJS;
+
+    public long startTime;
+    public long endTime;
+
+    void Awake()
+    {
+        // System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+        // int cur_time = (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
+        startTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        // Debug.Log(startTime);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (check)
@@ -25,56 +39,80 @@ public class LapEnd : MonoBehaviour
         {
             Debug.Log("Lap start");
             check = true;
-            StartCoroutine(RaceStart());
+            // StartCoroutine(RaceStart());
 
         }
     }
 
-    IEnumerator RaceEnd()
+    void Update()
     {
-        WWWForm form = new WWWForm();
-        form.AddField("address", "erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5");
-        form.AddField("raceId", "123");
-
-        var myData = new
+        if (!checkStart)
         {
-            address = @"erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5",
-            raceId = "123"
-        };
-
-        //Tranform it to Json object
-        string jsonData = JsonConvert.SerializeObject(myData);
-
-
-        UnityWebRequest req = UnityWebRequest.Post("http://localhost:3002/api/firebase/race-end", "POST");
-        req.SetRequestHeader("Content-Type", "application/json");
-        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(myData))) as UploadHandler;
-        req.certificateHandler = new BypassCertificate();
-
-        yield return req.SendWebRequest();
-
-        if (req.isNetworkError || req.isHttpError || req.isNetworkError)
-            print("Error: " + req.error);
-
-        print(req.downloadHandler.text);
+            if (current.isStarted)
+            {
+                startTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                checkStart = true;
+            }
+        }
     }
+
+
 
     IEnumerator RaceStart()
     {
-        WWWForm form = new WWWForm();
-        form.AddField("address", "erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5");
-        form.AddField("raceId", "123");
-
+        Debug.Log(userDataJS.getAddress());
+        var address = userDataJS.getAddress();
 
         var user = new UserData();
-        user.address = "erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5";
-        user.raceId = "123";
+        user.address = address;
+        user.raceId = "cursa no. 1";
+        user.startTime = startTime;
 
         //Tranform it to Json object
         string jsonData = JsonConvert.SerializeObject(user);
 
 
-        UnityWebRequest req = UnityWebRequest.Post("http://localhost:3002/api/firebase/race-end", "POST");
+        UnityWebRequest req = UnityWebRequest.Post("https://api.erms.ro/api/firebase/race-end", "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        req.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        req.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        //Send the request then wait here until it returns
+        yield return req.SendWebRequest();
+
+        if (req.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + req.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + req.downloadHandler.text);
+        }
+    }
+
+    IEnumerator RaceEnd()
+    {
+        endTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        Debug.Log("Start Time: " + startTime);
+        Debug.Log("End Time: " + endTime);
+        Debug.Log(userDataJS.getAddress());
+        var address = userDataJS.getAddress();
+        var raceName = userDataJS.getRaceName();
+        var raceId = userDataJS.getRaceId();
+
+        var user = new UserData();
+        user.address = address;
+        user.raceName = raceName;
+        user.raceId = raceId;
+        user.startTime = startTime;
+        user.endTime = endTime;
+
+        //Tranform it to Json object
+        string jsonData = JsonConvert.SerializeObject(user);
+
+
+        UnityWebRequest req = UnityWebRequest.Post("https://api.erms.ro/api/firebase/race-end", "POST");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
         req.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         req.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
@@ -106,4 +144,13 @@ public class UserData
 {
     public string address;
     public string raceId;
+    public string raceName;
+    public long startTime;
+    public long endTime;
+
+    // public UserData(string ad,string racei)
+    // {
+    //     address = ad;
+    //     raceId = racei;
+    // }
 }

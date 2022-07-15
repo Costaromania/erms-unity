@@ -10541,7 +10541,7 @@ GameObject:
   - component: {fileID: 237807568}
   - component: {fileID: 237807567}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Address
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10615,7 +10615,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: USER
+  m_Text: 
 --- !u!222 &237807569
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -33092,6 +33092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   check: 0
   current: {fileID: 1770364345}
+  userDataJS: {fileID: 1019753771}
 --- !u!1 &787931904
 GameObject:
   m_ObjectHideFlags: 0
@@ -42676,7 +42677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303502294c8b4364c87cc545458d53b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myText: {fileID: 237807568}
+  address: {fileID: 237807568}
+  userAddress: 
 --- !u!4 &1019753772
 Transform:
   m_ObjectHideFlags: 0
