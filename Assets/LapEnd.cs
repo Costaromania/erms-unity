@@ -96,10 +96,12 @@ public class LapEnd : MonoBehaviour
         endTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
         Debug.Log("Start Time: " + startTime);
         Debug.Log("End Time: " + endTime);
+        Debug.Log("Current Time: " + current.currentTime);
         Debug.Log(userDataJS.getAddress());
         var address = userDataJS.getAddress();
         var raceName = userDataJS.getRaceName();
         var raceId = userDataJS.getRaceId();
+        var raceTime = current.currentTime;
 
         var user = new UserData();
         user.address = address;
@@ -107,6 +109,7 @@ public class LapEnd : MonoBehaviour
         user.raceId = raceId;
         user.startTime = startTime;
         user.endTime = endTime;
+        user.raceTime = raceTime;
 
         //Tranform it to Json object
         string jsonData = JsonConvert.SerializeObject(user);
@@ -147,6 +150,7 @@ public class UserData
     public string raceName;
     public long startTime;
     public long endTime;
+    public float raceTime;
 
     // public UserData(string ad,string racei)
     // {
