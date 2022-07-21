@@ -12,6 +12,8 @@ public class LapEnd : MonoBehaviour
     public Timer current;
     public JavaScriptHelper userDataJS;
 
+    public MotorcycleController motorcycleController;
+
     public long startTime;
     public long endTime;
 
@@ -93,6 +95,8 @@ public class LapEnd : MonoBehaviour
 
     IEnumerator RaceEnd()
     {
+        motorcycleController.Finish();
+        motorcycleController.LoseInput();
         endTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
         Debug.Log("Start Time: " + startTime);
         Debug.Log("End Time: " + endTime);

@@ -33091,8 +33091,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   check: 0
+  checkStart: 0
   current: {fileID: 1770364345}
   userDataJS: {fileID: 1019753771}
+  motorcycleController: {fileID: 1693052190}
+  startTime: 0
+  endTime: 0
 --- !u!1 &787931904
 GameObject:
   m_ObjectHideFlags: 0
@@ -42679,6 +42683,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   address: {fileID: 237807568}
   userAddress: 
+  raceName: 
+  raceId: 
 --- !u!4 &1019753772
 Transform:
   m_ObjectHideFlags: 0
@@ -69184,6 +69190,17 @@ CapsuleCollider:
   m_Height: 0.1
   m_Direction: 0
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &1693052190 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+  m_PrefabInstance: {fileID: 1693052187}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693052188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99350d283f4ef53418045585ab13c546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1693227364 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9207599876117783741, guid: 795da6639f6c5484e897b20d8c1fef52, type: 3}
@@ -71811,6 +71828,7 @@ MonoBehaviour:
   currentTimeText: {fileID: 970699099}
   startText: {fileID: 1438003616}
   isFinished: 0
+  isStarted: 0
 --- !u!4 &1771531542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9207599876117783741, guid: 795da6639f6c5484e897b20d8c1fef52, type: 3}

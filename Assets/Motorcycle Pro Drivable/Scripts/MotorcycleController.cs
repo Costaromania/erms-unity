@@ -34,7 +34,7 @@ public class MotorcycleController : MonoBehaviour
     [SerializeField] Button resetBtn;
     public bool useTouchControls = false;
 
-    public GameObject theStart ;
+    public GameObject theStart;
     bool firstPress = false;
 
     public GameObject menu;
@@ -161,25 +161,37 @@ public class MotorcycleController : MonoBehaviour
 
     private void reset()
     {
-        
-        SceneManager.LoadScene(0);
-       
-    //     for(int i = 0; i < 10; i++)
-    //     {
-    //         rb.velocity = Vector3.zero;
-    //     verticalInput = 0f;
-    //     horizontalInput = 0f;
-    //     totalPower = 0f;
-    //      rearWheelCollider.brakeTorque = rb.mass * 200;
-    //         frontWheelCollider.brakeTorque = rb.mass * 200;  
-    //          gameObject.transform.position = originalPos;
-    //    rb.velocity = new Vector3(0, 0, 0); 
-    //     }
-      
-       
-       
-      
-            	
+
+        //SceneManager.LoadScene(0);
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        totalPower = 0f; 
+        rb.velocity = new Vector3(0, 0, 0);
+        rb.angularVelocity = Vector3.zero;
+        rb.AddTorque(0, 0, 0);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x - 0.5f, gameObject.transform.position.y, gameObject.transform.position.z - 0.5f);
+        gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+        cmpRagdollRider.SetRagdoll(false);
+        cam_Follow.SetActive(cam_Follow.activeInHierarchy);
+        cam_Follow.SetActive(true);
+        isCrashed = false;
+        Stabilizer();    
+
+    }
+
+    public void Finish(){
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        totalPower = 0f; 
+        rb.velocity = new Vector3(0, 0, 0);
+        rb.angularVelocity = Vector3.zero;
+        rb.AddTorque(0, 0, 0);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        cmpRagdollRider.SetRagdoll(false);
+        cam_Follow.SetActive(cam_Follow.activeInHierarchy);
+        cam_Follow.SetActive(true);
+        isCrashed = false;
+        Stabilizer(); 
     }
 
     private void resumeMenu()
@@ -336,17 +348,18 @@ public class MotorcycleController : MonoBehaviour
 
 
     void FixedUpdate()
-    {   
+    {
         currentTime += Time.deltaTime;
-       // if (!useTouchControls)
+        // if (!useTouchControls)
         //{
-            if(currentTime >= 3){
-            GetInput();      
-            }
+        if (currentTime >= 3)
+        {
+            GetInput();
+        }
         //   Debug.Log("Test delta time: " + Time.deltaTime);
-       // }
+        // }
 
-       
+
 
         Steer();
         UpdateRearWheel();
@@ -375,6 +388,12 @@ public class MotorcycleController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
+    }
+
+    public void LoseInput()
+    {
+        horizontalInput = 0f;
+        verticalInput = 0f;
     }
 
     void Steer()
@@ -584,9 +603,9 @@ public class MotorcycleController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-  
+
         Debug.Log(collision.gameObject.name);
-    
+
 
         Vector3 collisionForce = collision.impulse / Time.fixedDeltaTime;
 
