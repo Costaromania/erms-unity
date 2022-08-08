@@ -135,7 +135,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.31",
+      "version": "1.1.33",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -206,11 +206,11 @@
       "url": "https://packages.unity.com"
     },
     "io.sentry.unity": {
-      "version": "https://github.com/getsentry/unity.git#0.9.1",
+      "version": "https://github.com/getsentry/unity.git#0.21.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "317072c5c1cb41cc81ace5a49848feded9a21cb5"
+      "hash": "16fdeaba3611e15e57896dfb27ae58e89468aa8f"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

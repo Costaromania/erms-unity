@@ -99,10 +99,18 @@ public class MotorcycleController : MonoBehaviour
     public GameObject turnLeftLight;
     public GameObject turnRightLight;
 
+    public Checkpoint Checkpoint;
+
+    Transform checkpointsTransform;
+
+
+
     bool isLeftLightIndicator;
     bool isRigthLightIndicator;
 
     Vector3 originalPos;
+    Vector3 lastCheckpointPosition;
+    float lastCheckpointRotation;
 
     public float currentTime = 0f;
 
@@ -159,30 +167,62 @@ public class MotorcycleController : MonoBehaviour
     }
 
 
+    public void PlayerThroughCheckpoint(Checkpoint checkpoint)
+    {
+        // Debug.Log("Current checkpoint position: " + checkpoint.transform.position);
+        lastCheckpointPosition = checkpoint.transform.position;
+        lastCheckpointPosition.y = 0f;
+        lastCheckpointRotation = checkpoint.checkpointRotation;
+    }
+
     private void reset()
     {
 
         //SceneManager.LoadScene(0);
         verticalInput = 0f;
         horizontalInput = 0f;
-        totalPower = 0f; 
+        totalPower = 0f;
         rb.velocity = new Vector3(0, 0, 0);
         rb.angularVelocity = Vector3.zero;
         rb.AddTorque(0, 0, 0);
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x - 0.5f, gameObject.transform.position.y, gameObject.transform.position.z - 0.5f);
-        gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+        // gameObject.transform.position = new Vector3(gameObject.transform.position.x - 0.5f, gameObject.transform.position.y, gameObject.transform.position.z - 0.5f);
+        // gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+
+        gameObject.transform.position = lastCheckpointPosition;
+        gameObject.transform.rotation = Quaternion.Euler(0, lastCheckpointRotation, 0);
+
+
+        // switch (Checkpoint.checkpointName)
+        // {
+        //     case "Checkpoint":
+        //         gameObject.transform.position = new Vector3(Checkpoint.checkpointPosition.x, Checkpoint.checkpointPosition.y, Checkpoint.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint.checkpointRotation, 0);
+        //         break;
+        //     case "Checkpoint1":
+        //         gameObject.transform.position = new Vector3(Checkpoint1.checkpointPosition.x, Checkpoint1.checkpointPosition.y, Checkpoint1.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint1.checkpointRotation, 0);
+        //         break;
+        //     case "Checkpoint2":
+        //         gameObject.transform.position = new Vector3(Checkpoint2.checkpointPosition.x, Checkpoint2.checkpointPosition.y, Checkpoint2.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint2.checkpointRotation, 0);
+        //         break;
+        // }
+
+
+
         cmpRagdollRider.SetRagdoll(false);
         cam_Follow.SetActive(cam_Follow.activeInHierarchy);
         cam_Follow.SetActive(true);
         isCrashed = false;
-        Stabilizer();    
+        Stabilizer();
 
     }
 
-    public void Finish(){
+    public void Finish()
+    {
         verticalInput = 0f;
         horizontalInput = 0f;
-        totalPower = 0f; 
+        totalPower = 0f;
         rb.velocity = new Vector3(0, 0, 0);
         rb.angularVelocity = Vector3.zero;
         rb.AddTorque(0, 0, 0);
@@ -191,7 +231,7 @@ public class MotorcycleController : MonoBehaviour
         cam_Follow.SetActive(cam_Follow.activeInHierarchy);
         cam_Follow.SetActive(true);
         isCrashed = false;
-        Stabilizer(); 
+        Stabilizer();
     }
 
     private void resumeMenu()
@@ -350,14 +390,14 @@ public class MotorcycleController : MonoBehaviour
     void FixedUpdate()
     {
         currentTime += Time.deltaTime;
-        // if (!useTouchControls)
-        //{
-        if (currentTime >= 3)
+        if (!useTouchControls)
         {
-            GetInput();
+            if (currentTime >= 3)
+            {
+                GetInput();
+            }
+            //   Debug.Log("Test delta time: " + Time.deltaTime);
         }
-        //   Debug.Log("Test delta time: " + Time.deltaTime);
-        // }
 
 
 
@@ -379,6 +419,23 @@ public class MotorcycleController : MonoBehaviour
 
         speed = rb.velocity.magnitude * 3.6f;
 
+    }
+
+    void MobileInput()
+    {
+        if (useTouchControls)
+        {
+            if (reversePTI.buttonPressed)
+            {
+                Brake(true);
+                brakeLight.SetActive(true);
+            }
+            else
+            {
+                Brake(false);
+                brakeLight.SetActive(false);
+            }
+        }
     }
 
 
