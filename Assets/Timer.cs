@@ -19,7 +19,7 @@ public class Timer : MonoBehaviour
     public void FinishTime()
     {
         isFinished = true;
-        currentTime = currentTime;
+        currentTime = currentTime+0f;
     }
 
     // Start is called before the first frame update

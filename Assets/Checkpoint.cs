@@ -10,10 +10,13 @@ public class Checkpoint : MonoBehaviour
 
     public string checkpointName;
 
-    public bool isLastCheckpoint = false;
-
 
     public MotorcycleController trackCheckpoints;
+
+    public bool isLastCheckpoint = false;
+
+    public LapEnd lapEnd;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -21,7 +24,7 @@ public class Checkpoint : MonoBehaviour
         // Debug.Log("Awake: "+gameObject.name);
         // checkpointName = "Checkpoint";
         checkpointPosition = new Vector3(-248f, 0f, 245f);
-        checkpointRotation = 90f;
+        // checkpointRotation = 90f;
         // transform.position = checkpointPosition;
 
         
@@ -31,21 +34,27 @@ public class Checkpoint : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
-        Debug.Log("Checkpoint: " + transform.position);
+        // Debug.Log("Checkpoint: " + transform.position);
         {
-            switch (gameObject.name)
-            {
-                case "Checkpoint1":
-                    this.checkpointRotation = 90f;
-                    break;
-                case "Checkpoint2":
-                    this.checkpointRotation = 90f;
-                    break;
-                case "Checkpoint3":                    
-                    this.checkpointRotation = 90f;
-                    break;
+            // switch (gameObject.name)
+            // {
+            //     case "Checkpoint1":
+            //         this.checkpointRotation = 90f;
+            //         break;
+            //     case "Checkpoint2":
+            //         this.checkpointRotation = 90f;
+            //         break;
+            //     case "Checkpoint3":                    
+            //         this.checkpointRotation = 90f;
+            //         this.isLastCheckpoint = true;
+            //         break;
 
+            // }
+            if(isLastCheckpoint)
+            {
+                lapEnd.LastCheckpoint(this);
             }
+
             trackCheckpoints.PlayerThroughCheckpoint(this);
         }
 
@@ -55,6 +64,7 @@ public class Checkpoint : MonoBehaviour
     {
         this.trackCheckpoints = trackCheckpoints;
     }
+    
 
     // Update is called once per frame
     void Update()

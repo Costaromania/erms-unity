@@ -35,7 +35,6 @@ public class MotorcycleController : MonoBehaviour
     public bool useTouchControls = false;
 
     public GameObject theStart;
-    bool firstPress = false;
 
     public GameObject menu;
     public Button openMenu;
@@ -119,6 +118,8 @@ public class MotorcycleController : MonoBehaviour
 
     void Awake()
     {
+        lastCheckpointPosition = Checkpoint.checkpointPosition;
+        lastCheckpointRotation = Checkpoint.checkpointRotation;
         menu.SetActive(false);
         originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
 
@@ -177,7 +178,7 @@ public class MotorcycleController : MonoBehaviour
 
     private void reset()
     {
-
+        Debug.Log("Rotation: " + lastCheckpointRotation);
         //SceneManager.LoadScene(0);
         verticalInput = 0f;
         horizontalInput = 0f;
@@ -262,7 +263,6 @@ public class MotorcycleController : MonoBehaviour
             {
 
                 verticalInput += 0.01f;
-                firstPress = true;
 
             }
             else
@@ -566,7 +566,6 @@ public class MotorcycleController : MonoBehaviour
 
     void Brake(bool brake)
     {
-        firstPress = false;
         isBraking = brake;
 
         if (brake)
