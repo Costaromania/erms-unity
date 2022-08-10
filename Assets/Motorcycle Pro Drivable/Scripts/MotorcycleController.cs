@@ -31,16 +31,15 @@ public class MotorcycleController : MonoBehaviour
     /// Mobile controller variables
     /// </summary>
 
-    [SerializeField] Button resetBtn;
-    public bool useTouchControls = false;
+    public bool useTouchControls;
 
     public GameObject theStart;
 
     public GameObject menu;
     public Button openMenu;
     public Button resumeBtn;
-    public GameObject throttlButton;
-    MobileController throttlPTI;
+    public GameObject throttleButton;
+    MobileController throttlePTI;
     public GameObject reverseButton;
     MobileController reversePTI;
     public GameObject turnRightButton;
@@ -102,6 +101,8 @@ public class MotorcycleController : MonoBehaviour
 
     Transform checkpointsTransform;
 
+    public JavaScriptHelper jsHelper;
+
 
 
     bool isLeftLightIndicator;
@@ -114,10 +115,21 @@ public class MotorcycleController : MonoBehaviour
     public float currentTime = 0f;
 
 
-    [SerializeField] Button breakBtn;
+    public GameObject resetButton;
+    public GameObject menuResetButton;
+
+    public void enableTouchControls(bool touchControls)
+    {
+        throttleButton.SetActive(touchControls);
+        reverseButton.SetActive(touchControls);
+        turnRightButton.SetActive(touchControls);
+        turnLeftButton.SetActive(touchControls);
+        handbrakeButton.SetActive(touchControls);
+    }
 
     void Awake()
     {
+
         lastCheckpointPosition = Checkpoint.checkpointPosition;
         lastCheckpointRotation = Checkpoint.checkpointRotation;
         menu.SetActive(false);
@@ -149,8 +161,11 @@ public class MotorcycleController : MonoBehaviour
         tailLight.SetActive(true);
         dayLight.SetActive(true);
 
-        Button btn = breakBtn.GetComponent<Button>();
-        btn.onClick.AddListener(reset);
+        Button btnReset = resetButton.GetComponent<Button>();
+        btnReset.onClick.AddListener(reset);
+
+        Button menuBtnReset = menuResetButton.GetComponent<Button>();
+        menuBtnReset.onClick.AddListener(menuReset);
 
         Button btnResume = resumeBtn.GetComponent<Button>();
         btnResume.onClick.AddListener(resumeMenu);
@@ -158,7 +173,7 @@ public class MotorcycleController : MonoBehaviour
         Button btnOpenMenu = openMenu.GetComponent<Button>();
         btnOpenMenu.onClick.AddListener(resumeMenu);
 
-        throttlPTI = throttlButton.GetComponent<MobileController>();
+        throttlePTI = throttleButton.GetComponent<MobileController>();
         reversePTI = reverseButton.GetComponent<MobileController>();
         turnLeftPTI = turnLeftButton.GetComponent<MobileController>();
         turnRightPTI = turnRightButton.GetComponent<MobileController>();
@@ -176,8 +191,15 @@ public class MotorcycleController : MonoBehaviour
         lastCheckpointRotation = checkpoint.checkpointRotation;
     }
 
+    private void menuReset()
+    {
+        reset();
+        resumeMenu();
+    }
+
     private void reset()
     {
+        isCrashed = false;
         Debug.Log("Rotation: " + lastCheckpointRotation);
         //SceneManager.LoadScene(0);
         verticalInput = 0f;
@@ -244,6 +266,18 @@ public class MotorcycleController : MonoBehaviour
     private void Update()
     {
 
+        useTouchControls = jsHelper.useTouchControls;
+        enableTouchControls(useTouchControls);
+
+        if (isCrashed)
+        {
+            resetButton.SetActive(true);
+        }
+        else
+        {
+            resetButton.SetActive(false);
+        }
+
         if (useTouchControls)
         {
 
@@ -258,8 +292,7 @@ public class MotorcycleController : MonoBehaviour
                 brakeLight.SetActive(false);
             }
 
-
-            if (throttlPTI.buttonPressed)
+            if (throttlePTI.buttonPressed)
             {
 
                 verticalInput += 0.01f;

@@ -19,12 +19,21 @@ public class JavaScriptHelper : MonoBehaviour
     public string raceName;
     public string raceId;
 
+    public bool useTouchControls;
+
     void Awake()
     {
         //  SendToJS();
         setAddress(address.text);
         setRaceId(raceId);
         setRaceName(raceName);
+        if (useTouchControls)
+        {
+            setIsMobile("true");
+        }
+        else{
+            setIsMobile("false");
+        }
         // userAddress = "erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5";
 
     }
@@ -35,13 +44,35 @@ public class JavaScriptHelper : MonoBehaviour
 
     }
 
+    public void setIsMobile(string isMobile)
+    {
+        // Debug.Log(isMobile);
+        if (isMobile == "true")
+        {
+            useTouchControls = true;
+            Application.targetFrameRate = 60;
+        }
+        else
+        {
+            useTouchControls = false;
+        }
+
+    }
+
+    public bool getIsMobile()
+    {
+        return useTouchControls;
+    }
+
     public void setAddress(string text)
     {
         address.text = text;
-        if(text != "")
+        if (text != "")
         {
             userAddress = text;
-        } else {
+        }
+        else
+        {
             userAddress = "no address";
         }
         // address.text = "erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5";
@@ -54,10 +85,12 @@ public class JavaScriptHelper : MonoBehaviour
 
     public void setRaceName(string text)
     {
-        if(text != "")
+        if (text != "")
         {
             raceName = text;
-        } else {
+        }
+        else
+        {
             raceName = "no name";
         }
     }
@@ -69,10 +102,12 @@ public class JavaScriptHelper : MonoBehaviour
 
     public void setRaceId(string text)
     {
-        if(text != "")
+        if (text != "")
         {
             raceId = text;
-        } else {
+        }
+        else
+        {
             raceId = "no id";
         }
     }
