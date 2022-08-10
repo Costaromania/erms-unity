@@ -13776,7 +13776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: -181
+  checkpointRotation: 0
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 1
@@ -18289,7 +18289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: -100
+  checkpointRotation: -89
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 0
@@ -53442,7 +53442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: 69
+  checkpointRotation: 121
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 0
@@ -65875,7 +65875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: 123
+  checkpointRotation: 54
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 0
@@ -74102,7 +74102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: -115
+  checkpointRotation: -64
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 0
@@ -82292,7 +82292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpointPosition: {x: 0, y: 0, z: 0}
-  checkpointRotation: 49
+  checkpointRotation: 229
   checkpointName: 
   trackCheckpoints: {fileID: 1693052190}
   isLastCheckpoint: 0
