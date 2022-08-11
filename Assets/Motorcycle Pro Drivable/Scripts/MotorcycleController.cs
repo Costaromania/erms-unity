@@ -328,24 +328,19 @@ public class MotorcycleController : MonoBehaviour
         else
         {
 
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-
-                Brake(true);
-                brakeLight.SetActive(true);
-            }
-
-            //Brake
             if (Input.GetButton("Brake"))
             {
+                Debug.Log("Space Brake");
                 Brake(true);
                 brakeLight.SetActive(true);
 
             }
-            else if (rearWheelCollider.rpm < -1f && verticalInput > -0.7f)
-            {
-                Brake(true);
-            }
+            // else if (rearWheelCollider.rpm < -1f && verticalInput > -0.7f)
+            // {
+            //     Brake(true);
+            //     brakeLight.SetActive(true);
+
+            // }
             else
             {
                 Brake(false);
@@ -600,7 +595,7 @@ public class MotorcycleController : MonoBehaviour
     void Brake(bool brake)
     {
         isBraking = brake;
-
+        // Debug.Log("Did Brake: " + isBraking);
         if (brake)
         {
             rearWheelCollider.brakeTorque = rb.mass * 5;
@@ -706,6 +701,7 @@ public class MotorcycleController : MonoBehaviour
             if (cam_OnBoard.activeInHierarchy)
             {
                 cam_Follow.transform.position = this.transform.position + new Vector3(0, 2, -2);
+                Debug.Log(cam_Follow.transform.position);
                 cam_Follow.SetActive(true);
                 cam_OnBoard.SetActive(false);
             }
