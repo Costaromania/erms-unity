@@ -34,7 +34,7 @@ public class Checkpoint : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
-        // Debug.Log("Checkpoint: " + transform.position);
+        Debug.Log("Checkpoint: " + gameObject.name);
         {
             // switch (gameObject.name)
             // {

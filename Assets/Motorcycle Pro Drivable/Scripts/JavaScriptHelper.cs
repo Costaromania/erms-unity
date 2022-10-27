@@ -18,6 +18,8 @@ public class JavaScriptHelper : MonoBehaviour
     public string userAddress;
     public string raceName;
     public string raceId;
+    public string userTag;
+    public Text displayName;
 
     public bool useTouchControls;
 
@@ -41,7 +43,20 @@ public class JavaScriptHelper : MonoBehaviour
     void Update()
     {
         // setAddress("erd19sayrzwrx90ypkcgwg9m0el48hv8u4dczxst4r2c6l6v65mcv42qnjkkx5");
+        if (userTag != "")
+        {
+            displayName.text = userTag;
+        }
+        else
+        {
+            displayName.text = userAddress;
+        }
 
+    }
+
+    public void setUserTag(string tag)
+    {
+        userTag = tag;
     }
 
     public void setIsMobile(string isMobile)

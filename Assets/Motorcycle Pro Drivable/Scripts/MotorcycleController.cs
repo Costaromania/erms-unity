@@ -11,8 +11,11 @@ public class MotorcycleController : MonoBehaviour
 {
     public static bool gameIsPaused;
 
+    Vector3 startPosition;
+    Quaternion startRotation;
+
     [SerializeField] WheelCollider frontWheelCollider, rearWheelCollider;
-    [HideInInspector] public float maxEngineRpm = 14000f;
+    public float maxEngineRpm = 94000f;
     float minEngineRpm;
     [HideInInspector] public float engineRpm;
     [HideInInspector] public float speed;
@@ -103,6 +106,10 @@ public class MotorcycleController : MonoBehaviour
 
     public JavaScriptHelper jsHelper;
 
+    public Timer current;
+
+    public LapEnd lapEnd;
+
 
 
     bool isLeftLightIndicator;
@@ -113,6 +120,12 @@ public class MotorcycleController : MonoBehaviour
     float lastCheckpointRotation;
 
     public float currentTime = 0f;
+    public float bonusAcceleration;
+    public float bonusSpeed;
+    public float bonusBraking;
+    public float bonusSteering;
+    public float bonusHandling;
+    public float maxSpeed;
 
 
     public GameObject resetButton;
@@ -129,11 +142,13 @@ public class MotorcycleController : MonoBehaviour
 
     void Awake()
     {
-
+        startPosition = transform.position;
+        startRotation = transform.rotation;
         lastCheckpointPosition = Checkpoint.checkpointPosition;
         lastCheckpointRotation = Checkpoint.checkpointRotation;
         menu.SetActive(false);
         originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+
 
         cmpAudio = GetComponentInChildren<AudioEngine>();
         rb = GetComponent<Rigidbody>();
@@ -179,6 +194,14 @@ public class MotorcycleController : MonoBehaviour
         turnRightPTI = turnRightButton.GetComponent<MobileController>();
         handbrakePTI = handbrakeButton.GetComponent<MobileController>();
 
+        bonusBraking = bonusBraking;
+        bonusHandling = bonusHandling;
+        bonusSpeed = bonusSpeed;
+        bonusSteering = bonusSteering;
+        bonusAcceleration = bonusAcceleration;
+        maxSpeed = maxSpeed;
+
+
 
     }
 
@@ -193,8 +216,57 @@ public class MotorcycleController : MonoBehaviour
 
     private void menuReset()
     {
-        reset();
+        resetToStart();
         resumeMenu();
+    }
+
+    private void resetToStart()
+    {
+        current.Reset();
+        isCrashed = false;
+        lapEnd.isLastCheckpoint = false;
+        Debug.Log("Rotation: " + lastCheckpointRotation);
+        //SceneManager.LoadScene(0);
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        totalPower = 0f;
+        rb.velocity = new Vector3(0, 0, 0);
+        rb.angularVelocity = Vector3.zero;
+        rb.AddTorque(0, 0, 0);
+        // gameObject.transform.position = new Vector3(gameObject.transform.position.x - 0.5f, gameObject.transform.position.y, gameObject.transform.position.z - 0.5f);
+        // gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+
+        gameObject.transform.position = startPosition;
+        gameObject.transform.rotation = startRotation;
+
+
+        // switch (Checkpoint.checkpointName)
+        // {
+        //     case "Checkpoint":
+        //         gameObject.transform.position = new Vector3(Checkpoint.checkpointPosition.x, Checkpoint.checkpointPosition.y, Checkpoint.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint.checkpointRotation, 0);
+        //         break;
+        //     case "Checkpoint1":
+        //         gameObject.transform.position = new Vector3(Checkpoint1.checkpointPosition.x, Checkpoint1.checkpointPosition.y, Checkpoint1.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint1.checkpointRotation, 0);
+        //         break;
+        //     case "Checkpoint2":
+        //         gameObject.transform.position = new Vector3(Checkpoint2.checkpointPosition.x, Checkpoint2.checkpointPosition.y, Checkpoint2.checkpointPosition.z);
+        //         gameObject.transform.rotation = Quaternion.Euler(0, Checkpoint2.checkpointRotation, 0);
+        //         break;
+        // }
+
+
+
+        cmpRagdollRider.SetRagdoll(false);
+        cam_Follow.SetActive(cam_Follow.activeInHierarchy);
+        cam_Follow.SetActive(true);
+        isCrashed = false;
+        Stabilizer();
+        currentTime = 0f;
+        speed = 0f;
+        acceleration = 0f;
+        LoseInput();
     }
 
     private void reset()
@@ -238,6 +310,8 @@ public class MotorcycleController : MonoBehaviour
         cam_Follow.SetActive(true);
         isCrashed = false;
         Stabilizer();
+        acceleration = 0f;
+        speed = 0f;
 
     }
 
@@ -330,7 +404,7 @@ public class MotorcycleController : MonoBehaviour
 
             if (Input.GetButton("Brake"))
             {
-                Debug.Log("Space Brake");
+                // Debug.Log("Space Brake");
                 Brake(true);
                 brakeLight.SetActive(true);
 
@@ -412,6 +486,8 @@ public class MotorcycleController : MonoBehaviour
                 }
             }
         }
+
+
     }
 
 
@@ -423,8 +499,10 @@ public class MotorcycleController : MonoBehaviour
             if (currentTime >= 3)
             {
                 GetInput();
+                //   Debug.Log("Current time: " + currentTime);
             }
-            //   Debug.Log("Test delta time: " + Time.deltaTime);
+            // Debug.Log("Horizontal: " + horizontalInput);
+            // Debug.Log("Vertical: " + verticalInput);
         }
 
 
@@ -483,7 +561,8 @@ public class MotorcycleController : MonoBehaviour
 
     void Steer()
     {
-        steeringAngle = maxSteerAngle * horizontalInput;
+        steeringAngle = maxSteerAngle * horizontalInput * bonusSteering;
+        steeringAngle += (speed > 10f) ? 0f : steeringAngle * (speed / 10f);
         frontWheelCollider.steerAngle = Mathf.Lerp(frontWheelCollider.steerAngle, steeringAngle, 2f * Time.deltaTime);
 
 
@@ -503,7 +582,7 @@ public class MotorcycleController : MonoBehaviour
     private void EnginePower()
     {
         acceleration = verticalInput > 0 ? verticalInput : rearWheelCollider.rpm <= 1 && speed < 5 ? verticalInput * 0.1f : 0;
-
+        acceleration += bonusAcceleration;
 
 
         if (IsGrounded())
@@ -513,7 +592,7 @@ public class MotorcycleController : MonoBehaviour
                 engineRpm = Mathf.Lerp(engineRpm, 1000f + Mathf.Abs(rearWheelCollider.rpm) * (gearRatio[currentGear] * finalDrive), 10 * Time.deltaTime);
                 totalPower = enginePower.Evaluate(engineRpm) * finalDrive * acceleration;
 
-                rearWheelCollider.motorTorque = (verticalInput == 0 || speed > 325f) ? 0 : currentGear == gearRatio.Length - 1 ? totalPower / 3 : totalPower;
+                rearWheelCollider.motorTorque = (verticalInput == 0 || speed > maxSpeed) ? 0 : currentGear == gearRatio.Length - 1 ? totalPower / 3 : totalPower;
 
             }
             else
@@ -595,17 +674,20 @@ public class MotorcycleController : MonoBehaviour
     void Brake(bool brake)
     {
         isBraking = brake;
+        float bBraking = brake ? bonusBraking : 0f;
         // Debug.Log("Did Brake: " + isBraking);
         if (brake)
         {
-            rearWheelCollider.brakeTorque = rb.mass * 5;
-            frontWheelCollider.brakeTorque = rb.mass * 5;
+            rb.mass = 1000f;
+            rearWheelCollider.brakeTorque = rb.mass * 5 * bBraking;
+            frontWheelCollider.brakeTorque = rb.mass * 5 * (bBraking / 2);
 
         }
         else
         {
             rearWheelCollider.brakeTorque = 0;
             frontWheelCollider.brakeTorque = 0;
+            rb.mass = 200f;
             brakeLight.SetActive(false);
         }
     }
@@ -688,7 +770,7 @@ public class MotorcycleController : MonoBehaviour
     {
 
 
-        Debug.Log(collision.gameObject.name);
+        // Debug.Log(collision.gameObject.name);
 
 
         Vector3 collisionForce = collision.impulse / Time.fixedDeltaTime;
@@ -701,7 +783,7 @@ public class MotorcycleController : MonoBehaviour
             if (cam_OnBoard.activeInHierarchy)
             {
                 cam_Follow.transform.position = this.transform.position + new Vector3(0, 2, -2);
-                Debug.Log(cam_Follow.transform.position);
+                // Debug.Log(cam_Follow.transform.position);
                 cam_Follow.SetActive(true);
                 cam_OnBoard.SetActive(false);
             }

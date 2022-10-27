@@ -27,7 +27,9 @@ public class LapEnd : MonoBehaviour
     public long startTime;
     public long endTime;
 
-    bool isLastCheckpoint;
+    public bool isLastCheckpoint;
+
+    bool finished = false;
 
 
     void Awake()
@@ -41,23 +43,14 @@ public class LapEnd : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (check && !isFinished && isLastCheckpoint)
+        if (isLastCheckpoint & !finished)
         {
-            if (other.gameObject.tag == "Player")
+            if (gameObject.name == "LapEnd")
             {
                 Debug.Log("Lap End");
                 current.FinishTime();
                 StartCoroutine(RaceEnd());
-
-            }
-        }
-        else if (!check)
-        {
-            if (other.gameObject.tag == "Player")
-            {
-                Debug.Log("Lap start");
-                check = true;
-                // StartCoroutine(RaceStart());
+                finished = true;
 
             }
         }
@@ -71,6 +64,7 @@ public class LapEnd : MonoBehaviour
             {
                 startTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 checkStart = true;
+                Debug.Log("Start Time: " + startTime);
             }
         }
     }
@@ -128,9 +122,11 @@ public class LapEnd : MonoBehaviour
         req.SetRequestHeader("Content-Type", "application/json");
 
         //Send the request then wait here until it returns
-        yield return req.SendWebRequest();
-
+        req.SendWebRequest();
         HandleRequest(req);
+
+        yield return 0;
+
 
     }
 
@@ -139,7 +135,7 @@ public class LapEnd : MonoBehaviour
         if (!isFinished)
         {
             isFinished = true;
-            using UnityWebRequest req = UnityWebRequest.Post("https://api.erms.ro/api/firebase/race-end", "POST");
+            UnityWebRequest req = UnityWebRequest.Post("https://api.erms.ro/api/firebase/race-end", "POST");
             // motorcycleController.Finish();
             // motorcycleController.LoseInput();
             endTime = System.DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -170,13 +166,10 @@ public class LapEnd : MonoBehaviour
             req.SetRequestHeader("Content-Type", "application/json");
             req.disposeUploadHandlerOnDispose = true;
             req.disposeDownloadHandlerOnDispose = true;
-            yield return req.SendWebRequest();
-
-
-
-
-            // req.Dispose();
+            req.SendWebRequest();
             HandleRequest(req);
+
+            yield return 0;
         }
     }
 }

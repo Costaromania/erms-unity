@@ -22,6 +22,12 @@ public class Timer : MonoBehaviour
         currentTime = currentTime+0f;
     }
 
+    public void Reset(){
+        isFinished = false;
+        isStarted = false;
+        currentTime = -3f;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

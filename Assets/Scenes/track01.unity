@@ -33482,6 +33482,7 @@ MonoBehaviour:
   motorcycleController: {fileID: 1693052190}
   startTime: 0
   endTime: 0
+  isLastCheckpoint: 0
 --- !u!1 &787931904
 GameObject:
   m_ObjectHideFlags: 0
@@ -43138,6 +43139,8 @@ MonoBehaviour:
   userAddress: 
   raceName: 
   raceId: 
+  userTag: 
+  displayName: {fileID: 237807568}
   useTouchControls: 0
 --- !u!4 &1019753772
 Transform:
@@ -69753,6 +69756,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1824148308}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: lapEnd
+      value: 
+      objectReference: {fileID: 782160899}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: current
+      value: 
+      objectReference: {fileID: 1770364345}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: breakBtn
       value: 
       objectReference: {fileID: 870993206}
@@ -69760,6 +69771,10 @@ PrefabInstance:
       propertyPath: jsHelper
       value: 
       objectReference: {fileID: 1019753771}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: maxSpeed
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: openMenu
       value: 
@@ -69797,6 +69812,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 870993204}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: bonusBraking
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: bonusSteering
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: reverseButton
       value: 
       objectReference: {fileID: 900529639}
@@ -69827,6 +69850,10 @@ PrefabInstance:
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: useTouchControls
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: bonusAcceleration
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: enginePower.m_Curve.Array.data[0].time
