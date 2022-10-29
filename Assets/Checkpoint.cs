@@ -11,60 +11,79 @@ public class Checkpoint : MonoBehaviour
     public string checkpointName;
 
 
-    public MotorcycleController trackCheckpoints;
+    public MotorcycleController MotorcycleController;
 
     public bool isLastCheckpoint = false;
 
     public LapEnd lapEnd;
+    public int CurrentCheckpointNumber;
+    public int NextCheckpointNumber;
+    public int CheckpointsCount;
+    public int LapsCount;
+    int CurrentLapNumber;
+
 
 
     // Start is called before the first frame update
     void Awake()
     {
+
         // Debug.Log("Awake: "+gameObject.name);
         // checkpointName = "Checkpoint";
         checkpointPosition = new Vector3(-248f, 0f, 245f);
         // checkpointRotation = 90f;
         // transform.position = checkpointPosition;
 
-        
+        //get number of child objects for checkpoint
+        CheckpointsCount = transform.parent.childCount;
+        if (MotorcycleController != null)
+        {
+            LapsCount = MotorcycleController.lapsCount;
+            CurrentLapNumber = 1;
+            Debug.Log("CheckpointsCount: " + CheckpointsCount);
+        }
+
+
+
 
     }
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
-        Debug.Log("Checkpoint: " + gameObject.name);
         {
-            // switch (gameObject.name)
-            // {
-            //     case "Checkpoint1":
-            //         this.checkpointRotation = 90f;
-            //         break;
-            //     case "Checkpoint2":
-            //         this.checkpointRotation = 90f;
-            //         break;
-            //     case "Checkpoint3":                    
-            //         this.checkpointRotation = 90f;
-            //         this.isLastCheckpoint = true;
-            //         break;
 
-            // }
-            if(isLastCheckpoint)
+            if (gameObject.name == "Checkpoint" + CurrentCheckpointNumber)
             {
-                lapEnd.LastCheckpoint(this);
-            }
+                Debug.Log("Checkpoint: " + CurrentCheckpointNumber);
+                NextCheckpointNumber++;
+                if (CurrentCheckpointNumber == CheckpointsCount)
+                {
 
-            trackCheckpoints.PlayerThroughCheckpoint(this);
+                    if (CurrentLapNumber == LapsCount)
+                    {
+                        isLastCheckpoint = true;
+                        // lapEnd.isLastCheckpoint = true;
+                        lapEnd.LastCheckpoint(this);
+                    }
+                    NextCheckpointNumber = 1;
+                    CurrentLapNumber++;
+                }
+            }
+            else
+            {
+                Debug.Log("Wrong Checkpoint");
+            }
+            MotorcycleController.PlayerThroughCheckpoint(this);
         }
 
     }
 
     public void SetTrackCheckpoints(MotorcycleController trackCheckpoints)
     {
-        this.trackCheckpoints = trackCheckpoints;
+        this.MotorcycleController = trackCheckpoints;
     }
-    
+
 
     // Update is called once per frame
     void Update()

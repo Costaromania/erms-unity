@@ -13778,9 +13778,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: 0
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 1
   lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 7
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &315138352
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18291,9 +18296,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: -89
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
   lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 6
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &424345048
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19488,6 +19498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -53638,9 +53649,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: 121
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
   lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 4
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &1306961873
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -66071,9 +66087,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: 54
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
-  lapEnd: {fileID: 0}
+  lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 2
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &1586818398
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -66764,9 +66785,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: 90
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
-  lapEnd: {fileID: 0}
+  lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 1
+  NextCheckpointNumber: 2
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &1615682131
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69752,6 +69778,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: laps
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: menu
       value: 
       objectReference: {fileID: 1824148308}
@@ -69773,7 +69803,7 @@ PrefabInstance:
       objectReference: {fileID: 1019753771}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: maxSpeed
-      value: 500
+      value: 425
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: openMenu
@@ -69788,6 +69818,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1438003613}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: lapsCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: resumeBtn
       value: 
       objectReference: {fileID: 763085918}
@@ -69795,6 +69829,10 @@ PrefabInstance:
       propertyPath: Checkpoint
       value: 
       objectReference: {fileID: 1615682130}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: bonusSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: Checkpoint1
       value: 
@@ -69813,11 +69851,15 @@ PrefabInstance:
       objectReference: {fileID: 870993204}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: bonusBraking
-      value: 1.9
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: bonusHandling
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: bonusSteering
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: reverseButton
@@ -69853,7 +69895,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: bonusAcceleration
-      value: 1.02
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: gearRatio.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
+      propertyPath: gearRatio.Array.data[6]
+      value: 1.58
       objectReference: {fileID: 0}
     - target: {fileID: 1644892947203304657, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: enginePower.m_Curve.Array.data[0].time
@@ -69877,7 +69927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2132460776775579242, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.0000001
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2132460776775579242, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: m_LocalScale.y
@@ -69885,7 +69935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2132460776775579242, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.0000004
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2132460776775579242, guid: a330969bbb31836488d11cb9b78d970a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -74335,9 +74385,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: -64
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
   lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 5
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &1810786980
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -82660,9 +82715,14 @@ MonoBehaviour:
   checkpointPosition: {x: 0, y: 0, z: 0}
   checkpointRotation: 229
   checkpointName: 
-  trackCheckpoints: {fileID: 1693052190}
+  MotorcycleController: {fileID: 1693052190}
   isLastCheckpoint: 0
   lapEnd: {fileID: 782160899}
+  CurrentCheckpointNumber: 3
+  NextCheckpointNumber: 0
+  CheckpointsCount: 0
+  LapsCount: 0
+  CurrentLapNumber: 0
 --- !u!65 &2032536500
 BoxCollider:
   m_ObjectHideFlags: 0

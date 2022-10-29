@@ -119,13 +119,16 @@ public class MotorcycleController : MonoBehaviour
     Vector3 lastCheckpointPosition;
     float lastCheckpointRotation;
 
-    public float currentTime = 0f;
+
+    [HideInInspector] public float currentTime = 0f;
     public float bonusAcceleration;
     public float bonusSpeed;
     public float bonusBraking;
     public float bonusSteering;
     public float bonusHandling;
     public float maxSpeed;
+
+    public int lapsCount;
 
 
     public GameObject resetButton;
@@ -148,7 +151,7 @@ public class MotorcycleController : MonoBehaviour
         lastCheckpointRotation = Checkpoint.checkpointRotation;
         menu.SetActive(false);
         originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
-
+        
 
         cmpAudio = GetComponentInChildren<AudioEngine>();
         rb = GetComponent<Rigidbody>();
@@ -194,12 +197,12 @@ public class MotorcycleController : MonoBehaviour
         turnRightPTI = turnRightButton.GetComponent<MobileController>();
         handbrakePTI = handbrakeButton.GetComponent<MobileController>();
 
-        bonusBraking = bonusBraking;
-        bonusHandling = bonusHandling;
-        bonusSpeed = bonusSpeed;
-        bonusSteering = bonusSteering;
-        bonusAcceleration = bonusAcceleration;
-        maxSpeed = maxSpeed;
+        // bonusBraking = bonusBraking;
+        // bonusHandling = bonusHandling;
+        // bonusSpeed = bonusSpeed;
+        // bonusSteering = bonusSteering;
+        // bonusAcceleration = bonusAcceleration;
+        // maxSpeed = maxSpeed;
 
 
 
@@ -582,7 +585,7 @@ public class MotorcycleController : MonoBehaviour
     private void EnginePower()
     {
         acceleration = verticalInput > 0 ? verticalInput : rearWheelCollider.rpm <= 1 && speed < 5 ? verticalInput * 0.1f : 0;
-        acceleration += bonusAcceleration;
+        acceleration = acceleration * bonusAcceleration;
 
 
         if (IsGrounded())
@@ -678,7 +681,7 @@ public class MotorcycleController : MonoBehaviour
         // Debug.Log("Did Brake: " + isBraking);
         if (brake)
         {
-            rb.mass = 1000f;
+            rb.mass = 500f;
             rearWheelCollider.brakeTorque = rb.mass * 5 * bBraking;
             frontWheelCollider.brakeTorque = rb.mass * 5 * (bBraking / 2);
 
